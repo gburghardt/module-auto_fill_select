@@ -1,0 +1,103 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>Demo: Auto Fill Select Module</title>
+	<style type="text/css">
+		.autofill-pending {
+			opacity: .5;
+		}
+	</style>
+</head>
+<body data-actions="autoFill.populate">
+	<select name="year"
+		data-autofill-group="vehicles"
+		data-autofill-url="/vehicles/makes"
+		data-autofill-target="make">
+		<option value="">Choose Year</option>
+		<option value="2000">2000</option>
+		<option value="2001">2001</option>
+	</select>
+
+	<select name="make" class="autofill-pending" disabled
+		data-autofill-group="vehicles"
+		data-autofill-url="/vehicles/models"
+		data-autofill-target="model">
+		<option value="">...</option>
+	</select>
+
+	<select name="model" class="autofill-pending" disabled
+		data-autofill-group="vehicles">
+		<option value="">...</option>
+	</select>
+
+	<script type="text/javascript" src="../bower_components/oxydizr/src/Oxydizr.js"></script>
+	<script type="text/javascript" src="../bower_components/oxydizr/src/Oxydizr/FrontController.js"></script>
+	<script type="text/javascript" src="../bower_components/module-base/src/module/base.js"></script>
+	<script type="text/javascript" src="../bower_components/module-utils/dist/module-utils-base.concat.js"></script>
+	<script type="text/javascript" src="../bower_components/module-utils/dist/module-utils-element_store.concat.js"></script>
+	<script type="text/javascript" src="../bower_components/module-utils/dist/module-utils-events.concat.js"></script>
+	<script type="text/javascript" src="../bower_components/mocking_bird/src/mocking_bird.js"></script>
+	<script type="text/javascript" src="../bower_components/mocking_bird/src/mocking_bird/xml_http_request.js"></script>
+	<script type="text/javascript" src="../src/module/auto_fill_select_module.js"></script>
+	<script type="text/javascript">
+
+		// Set up fake AJAX
+		MockingBird.XMLHttpRequest.disableNetworkConnections()
+			.mock("/vehicles/makes?year=2000", "GET", {
+				status: 200,
+				responseHeaders: {
+					"content-type": "text/json"
+				},
+				body: [{
+					value: 83,
+					label: "Chevrolette",
+				}, {
+					value: 78274,
+					label: "Ford"
+				}]
+			})
+			.mock("/vehicles/models?make=83", "GET", {
+				status: 200,
+				responseHeaders: {
+					"content-type": "text/json"
+				},
+				body: [{
+					value: 2413,
+					label: "Cobalt"
+				}, {
+					value: 4353245,
+					label: "Corvette"
+				}]
+			})
+			.mock("/vehicles/models?make=78274", "GET", {
+				status: 200,
+				responseHeaders: {
+					"content-type": "text/json"
+				},
+				body: [{
+					value: 25346,
+					label: "Explorer"
+				}, {
+					value: 3478128,
+					label: "Expedition"
+				}, {
+					value: 10684,
+					label: "Taurus"
+				}]
+			});
+
+		// Set up front controller to handle DOM events
+		var frontController = new Oxydizr.FrontController()
+			.init(document.documentElement);
+
+		var autoFill = new Module.AutoFillSelectModule()
+			.init(document.documentElement);
+
+		autoFill.controllerId = "autoFill";
+
+		frontController.registerController(autoFill);
+
+	</script>
+</body>
+</html>
