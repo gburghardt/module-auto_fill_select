@@ -2,7 +2,7 @@
 	"name": "module-auto_fill_select",
 	"description": "Easy Ajax filled dropdowns",
 	"homepage": "https://github.com/gburghardt/module-auto_fill_select",
-    "version": "1.0.1",
+    "version": "1.0.2",
 	"repository": { "type": "git", "url": "https://github.com/gburghardt/module-auto_fill_select.git" },
 	"authors": [
 		"Greg Burghardt <greg_burghardt@yahoo.com>"
@@ -10,10 +10,10 @@
 	"license": "MIT",
 	"main": "src/module/auto_fill_select_module.js",
 	"dependencies": {
-		"module-utils": "~1.0.4"
+		"module-utils": "~1.0.5",
+		"oxydizr": "~1.0.1"
 	},
 	"devDependencies": {
-		"oxydizr": "~1.0.1",
 		"mocking_bird": "~0.0.1"
 	}
 }
